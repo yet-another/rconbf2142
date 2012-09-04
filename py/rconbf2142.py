@@ -38,15 +38,11 @@ def invoke(sock, msg):
     return _recv(sock) if _send(sock, "\x02{0}\n".format(msg)) else False
 
 def _send(sock, msg):
-    sent = 0
-    msglen = len(msg)
+    try:
+        sock.sendall(msg)
 
-    while sent < msglen:
-        try:
-            sent += sock.send(msg)
-
-        except socket.error or socket.herror or socket.gaierror:
-            return False
+    except socket.error or socket.herror or socket.gaierror:
+        return False
 
     return True
 
